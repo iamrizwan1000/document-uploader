@@ -34,7 +34,6 @@ class UserController extends Controller
             'users' => $user,
             'searches' => \Illuminate\Support\Facades\Request::only(['first_name','last_name','email']),
             'deleted_users' => UserResource::collection(User::onlyTrashed()->get()),
-            'roles' => RoleResource::collection(Role::where('guard_name', 'web')->get())
         ]);
     }
 
@@ -57,7 +56,6 @@ class UserController extends Controller
 
         return Inertia::render('Admin/User/Form',[
             'user' => new UserResource($user),
-            'roles' => RoleResource::collection(Role::where('guard_name', 'web')->get()),
         ]);
     }
 

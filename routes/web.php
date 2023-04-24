@@ -45,7 +45,7 @@ Route::get('/dashboard', [UserDashboardController::class,'index'])->name('dashbo
 Route::middleware(['auth'])->prefix('user')
     ->name('user.')
     ->group(function () {
-        Route::get('/', [UserController::class, 'profile'])->name('profile');
+        Route::get('/profile', [UserController::class, 'profile'])->name('profile');
         Route::post('/user', [UserController::class, 'updateProfile'])->name('updateProfile');
     });
 

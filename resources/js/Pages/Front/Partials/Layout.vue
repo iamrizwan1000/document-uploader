@@ -184,7 +184,7 @@
 </svg>
                   <span class="flex-1 flex flex-col min-w-0">
                     <span class="text-gray-900 text-sm font-medium truncate">{{user.first_name}} {{user.last_name}}</span>
-<!--                    <span class="text-gray-500 text-sm truncate">{{user.email}}</span>-->
+                      <!--                    <span class="text-gray-500 text-sm truncate">{{user.email}}</span>-->
                   </span>
                 </span>
                 <SelectorIcon class="flex-shrink-0 h-5 w-5 text-gray-400 group-hover:text-gray-500" aria-hidden="true" />
@@ -204,9 +204,9 @@
                         </Menu>
                     </div>
                 </div>
-<!--                <TransitionGroup name="fade" mode="out-in" tag="slot" appear>-->
+                <!--                <TransitionGroup name="fade" mode="out-in" tag="slot" appear>-->
                 <slot :search="search" :user="user"></slot>
-<!--                </TransitionGroup>-->
+                <!--                </TransitionGroup>-->
             </main>
         </div>
 
@@ -227,14 +227,7 @@ import {
     TransitionRoot,
 } from '@headlessui/vue'
 import {LockOpenIcon, MenuAlt1Icon, RefreshIcon, XIcon} from '@heroicons/vue/outline'
-import {
-    ChevronRightIcon,
-    DotsVerticalIcon,
-    OfficeBuildingIcon,
-    SearchIcon,
-    SelectorIcon,
-    VariableIcon
-} from '@heroicons/vue/solid'
+import {ChevronRightIcon, DotsVerticalIcon, OfficeBuildingIcon, SearchIcon, SelectorIcon} from '@heroicons/vue/solid'
 // import AccountList from "../ClickToAccount/AccountList.vue";
 
 const show = ref(false)
