@@ -15,6 +15,8 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
+            $table->string('image');
+            $table->bigInteger('user_id');
             $table->timestamps();
         });
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\Front\AuthController;
 use App\Http\Controllers\Front\DashboardController as UserDashboardController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Front\UserController;
+use \App\Http\Controllers\Front\DocumentController;
 
 
 /*
@@ -47,6 +48,8 @@ Route::middleware(['auth'])->prefix('user')
     ->group(function () {
         Route::get('/profile', [UserController::class, 'profile'])->name('profile');
         Route::post('/user', [UserController::class, 'updateProfile'])->name('updateProfile');
+        Route::get('/document/create', [DocumentController::class, 'create'])->name('document.create');
+        Route::post('/document/store', [DocumentController::class, 'store'])->name('document.store');
     });
 
 Route::controller(AdminAuthController::class)->prefix('admin')
