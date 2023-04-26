@@ -6,6 +6,7 @@ use App\Http\Controllers\Front\AuthController;
 use App\Http\Controllers\Front\DashboardController as UserDashboardController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Front\UserController;
+use \App\Http\Controllers\Admin\UserController as AdminUserController;
 use \App\Http\Controllers\Front\DocumentController;
 
 
@@ -60,10 +61,13 @@ Route::controller(AdminAuthController::class)->prefix('admin')
         Route::post('/login', 'login')->name('login');
     });
 
-Route::controller(DashboardController::class)->middleware(['CheckAdmin'])->prefix('admin')
+Route::middleware(['CheckAdmin'])->prefix('admin')
     ->name('admin.')->group(function () {
-        Route::get('/dashboard', 'index')->name('dashboard');
-
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('/user', [AdminUserController::class, 'index'])->name('user');
+        Route::get('/user/view/{id}', [AdminUserController::class, 'view'])->name('user.view');
+        Route::get('/user/profile/{id}', [AdminUserController::class, 'profile'])->name('user.profile');
+        Route::post('/user', [AdminUserController::class, 'updateProfile'])->name('user.updateProfile');
     });
 
 

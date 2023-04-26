@@ -7,6 +7,8 @@ import { InertiaProgress } from '@inertiajs/progress';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import Toaster from "@meforma/vue-toaster";
+import 'viewerjs/dist/viewer.css'
+import VueViewer from 'v-viewer'
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -17,6 +19,7 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(Toaster)
+            .use(VueViewer)
             .use(ZiggyVue, Ziggy)
             .mount(el);
     },

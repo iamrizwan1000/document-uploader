@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\ImageResource;
 use App\Http\Resources\RoleResource;
 use App\Http\Resources\UserResource;
+use App\Models\Document;
 use App\Models\User;
 use App\Repositories\AuthRepository;
 use App\Repositories\Interfaces\UserInterface;
@@ -20,93 +22,55 @@ use Spatie\Permission\Models\Role;
 class UserController extends Controller
 {
 
+    public function index(){
 
-    /**
-     * @param UserRepository $userRepository
-     * @param Request $request
-     * @return \Inertia\Response
-     */
-    public function index(UserRepository $userRepository, Request $request){
-
-        $user = $userRepository->index($request);
+        $user = User::paginate(15);
 
         return Inertia::render('Admin/User/Index', [
             'users' => $user,
-            'searches' => \Illuminate\Support\Facades\Request::only(['first_name','last_name','email']),
-            'deleted_users' => UserResource::collection(User::onlyTrashed()->get()),
+        ]);
+    }
+
+    public function view($id){
+
+        $user = User::where('id', $id)->first();
+        $docs = Document::where('user_id', $id)->get();
+        return Inertia::render('Admin/User/Documents',[
+            'docs' => ImageResource::collection($docs),
+            'user' => $user
         ]);
     }
 
 
     /**
+     * @param UserInterface $userRepository
      * @return \Inertia\Response
      */
-    public function create(){
+    public function profile(UserInterface $userRepository,$id){
 
-        return Inertia::render('Admin/User/Form',[
-            'roles' => RoleResource::collection(Role::where('guard_name', 'web')->get()),
-        ]);
-    }
-
-
-    public function edit($token,$id){
-
-        $user = User::find($id);
+        $user = new UserResource(User::find($id));
 
 
         return Inertia::render('Admin/User/Form',[
-            'user' => new UserResource($user),
+            'user' => $user,
         ]);
-    }
-
-
-    /**
-     * @param Request $request
-     * @param UserInterface $userRepository
-     * @param $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function adminCreateuserForFrontEnd(\Illuminate\Http\Request $request, UserInterface $userRepository, $id){
-
-        $request->validate([
-            'first_name' => ['required','min:3','alpha_dash','doesnt_start_with:-,_'],
-            'last_name' => ['required'],
-            'email' => ['required','unique:users', 'email'],
-            'role_id' => ['required'],
-            'linkedin' => ['nullable'],
-            'company' => ['nullable'],
-            'password' => ['required'],
-        ]);
-
-        try {
-            $userRepository->adminCreateuserForFrontEnd($request->all());
-
-
-            return redirect()->back()->with(['title' => 'Success', 'message' => 'Saved Successfully']);
-        }catch (\Exception $e){
-
-            return redirect()->back()->with(['title' => 'Success', 'message' => 'Not Updated Successfully']);
-        }
 
 
     }
 
 
     /**
-     * @param Request $request
+     * @param \Illuminate\Http\Request $request
      * @param UserInterface $userRepository
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(\Illuminate\Http\Request $request, UserInterface $userRepository, $id){
+    public function updateProfile(\Illuminate\Http\Request $request, UserInterface $userRepository){
+
 
         $request->validate([
-            'first_name' => ['required','min:3','alpha_dash','doesnt_start_with:-,_'],
-            'last_name' => ['required'],
+            'name' => ['required'],
             'email' => ['required', 'email'],
-            'role_id' => ['required'],
-            'linkedin' => ['nullable'],
-            'company' => ['nullable'],
             'password' => ['nullable'],
         ]);
 
@@ -122,65 +86,6 @@ class UserController extends Controller
 
 
     }
-
-    /**
-     * @param RegisterRequest $registerRequest
-     * @param AuthRepository $authRepository
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(RegisterRequest $registerRequest, AuthRepository $authRepository){
-
-        // Register through AuthRepository function
-        $user = $authRepository->register($registerRequest->all());
-
-        // Get response from AuthRepository and redirect according to response
-        if ($user->getData()->error != 'true') {
-            $user = $user->getData()->data->data;
-
-            $user = User::find($user->id);
-            $user->email_verified_token = null;
-            $user->email_verified_at = Carbon::now();
-            $user->parent_id = Auth::user()->id;
-            $user->save();
-
-
-            return redirect()->back()->with(['title' => 'Success', 'message' => "User has been added successfully"]);
-
-        }else{
-            return redirect()->back()->with(['title' => 'Error', 'message' => $user->getData()->message]);
-
-        }
-
-    }
-
-
-    /**
-     * @param $token
-     * @param $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function active($token, $id){
-
-        $data = User::withTrashed()->find($id);
-        $data->deleted_at = null;
-        $data->save();
-
-        return Redirect::back();
-    }
-
-
-    /**
-     * @param $token
-     * @param $id
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function delete($token, $id){
-
-        $data = User::find($id)->delete();
-
-        return Redirect::back();
-    }
-
 
 
 }

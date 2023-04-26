@@ -2,7 +2,6 @@
     <Layout>
         <Transition name="fade" mode="out-in" appear>
             <div class="max-w-7xl mx-auto sm:px-6 lg:py-8 lg:px-8 py-3 px-3">
-                <!--            <Breadcrumb class="mb-5"></Breadcrumb>-->
                 <div class="mb-8">
                     <h2 class="text-2xl font-sans tracking-tight text-gray-900 sm:text-1xl">
                         <span class="block">Edit My Profile Info</span>

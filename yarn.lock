@@ -5632,10 +5632,23 @@
   "resolved" "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
   "version" "8.3.2"
 
+"v-viewer@^3.0.11":
+  "integrity" "sha512-E8LOdAxhzuktt4HB3PswVCccQ1Q1sYHYnLsS6zaJISpb5EvmAFs5sYNfXnDLFxVb5DQ82v4ZlGxkYlseXwWRJw=="
+  "resolved" "https://registry.npmjs.org/v-viewer/-/v-viewer-3.0.11.tgz"
+  "version" "3.0.11"
+  dependencies:
+    "lodash" "^4.17.21"
+    "viewerjs" "^1.9.0"
+
 "vary@~1.1.2":
   "integrity" "sha1-IpnwLG3tMNSllhsLn3RSShj2NPw="
   "resolved" "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   "version" "1.1.2"
+
+"viewerjs@^1.9.0":
+  "integrity" "sha512-efG3U61Umuj/1x6JAtdvnY9m407C/RkrkFilsMcLEWKDivpjNU3/FeL+feCY1Vkur9aQeBJ+z6K4CCPP7hv6vA=="
+  "resolved" "https://registry.npmjs.org/viewerjs/-/viewerjs-1.11.3.tgz"
+  "version" "1.11.3"
 
 "vite-plugin-full-reload@^1.0.1":
   "integrity" "sha512-kVZFDFWr0DxiHn6MuDVTQf7gnWIdETGlZh0hvTiMXzRN80vgF4PKbONSq8U1d0WtHsKaFODTQgJeakLacoPZEQ=="
