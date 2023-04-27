@@ -51,7 +51,7 @@ class AuthController extends Controller
             $user = $user->getData()->data->data;
 
             // Below function will send confirmation email to user, Queue needs to be added later.
-            Mail::to($user->email)->send(new VerifyEmail($user->email_verified_token));
+            Mail::to($user->email)->send(new VerifyEmail($user));
 
             return Inertia::render('Components/Success',[
                 'user' => $user,
@@ -181,7 +181,7 @@ class AuthController extends Controller
             $user->save();
 
             // Below function will send confirmation email to user, Queue needs to be added later.
-            Mail::to($user->email)->send(new ResetEmail($user->email_verified_token));
+            Mail::to($user->email)->send(new ResetEmail($user));
 
             return Inertia::render('Components/Verify',[
                 'user' => new UserResource($user),
@@ -210,7 +210,7 @@ class AuthController extends Controller
             $user->save();
 
             // Below function will send confirmation email to user, Queue needs to be added later.
-            Mail::to($authResendVerifyEmailRequest['email'])->send(new VerifyEmail($user->email_verified_token));
+            Mail::to($authResendVerifyEmailRequest['email'])->send(new VerifyEmail($user));
 
             return $this->success([
             ],'Confirmation email has been sent again to your Email please approve to continue to login');

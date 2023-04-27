@@ -34,9 +34,9 @@ class UserController extends Controller
     public function view($id){
 
         $user = User::where('id', $id)->first();
-        $docs = Document::where('user_id', $id)->get();
-        return Inertia::render('Admin/User/Documents',[
-            'docs' => ImageResource::collection($docs),
+        $docs = Document::where('user_id', $id)->orderBy('extension', 'xlsx')->get();
+        return Inertia::render('Admin/User/View',[
+            'doc' => ImageResource::collection($docs),
             'user' => $user
         ]);
     }

@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\AdminResource;
+use App\Http\Resources\UserResource;
 use App\Models\Admin;
+use App\Models\User;
 use App\Repositories\AuthRepository;
+use App\Repositories\Interfaces\UserInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -72,6 +76,58 @@ class AuthController extends Controller
 
     }
 
+
+    /**
+     * @param UserInterface $userRepository
+     * @return \Inertia\Response
+     */
+    public function profile(UserInterface $userRepository){
+
+        $user = new AdminResource(\auth()->guard('admin')->user());
+
+
+        return Inertia::render('Admin/Auth/Form',[
+            'user' => $user,
+        ]);
+
+
+    }
+
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param UserInterface $userRepository
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateProfile(\Illuminate\Http\Request $request){
+
+        $request->validate([
+            'name' => ['required'],
+            'email' => ['required', 'email'],
+            'password' => ['nullable'],
+        ]);
+
+        try {
+
+            $user = Admin::find(\auth()->guard('admin')->user()->id);
+            $user->name = $request['name'];
+            $user->email = $request['email'];
+
+            if (isset($request['password'])) {
+                $user->password = $request['password'];
+            }
+
+            $user->save();
+
+            return redirect()->back()->with(['title' => 'Success', 'message' => 'Updated Successfully']);
+        }catch (\Exception $e){
+
+            return redirect()->back()->with(['title' => 'Success', 'message' => 'Not Updated Successfully']);
+        }
+
+
+    }
 
     /**
      * @param Request $request

@@ -184,6 +184,7 @@ export default {
             navigation : [
                 { name: 'Dashboard', href: route('admin.dashboard'), icon: HomeIcon, current: true },
                 { name: 'Users', href: route('admin.user'), icon: UserGroupIcon, current: false },
+                { name: 'Profile', href: route('admin.profile'), icon: UserGroupIcon, current: false },
             ],
         }
     },

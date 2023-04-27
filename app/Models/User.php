@@ -58,4 +58,8 @@ class User extends Authenticatable
         return $this->belongsTo(static::class, 'parent_id');
     }
 
+    public function documents() {
+        return $this->hasMany(Document::class);
+    }
+
 }

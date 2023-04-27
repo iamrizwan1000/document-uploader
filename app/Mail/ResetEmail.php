@@ -13,16 +13,16 @@ class ResetEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $pin;
+    public $user;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($pin)
+    public function __construct($user)
     {
-        $this->pin = $pin;
+        $this->user = $user;
     }
 
     /**

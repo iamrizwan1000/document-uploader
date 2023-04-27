@@ -51,18 +51,21 @@ Route::middleware(['auth'])->prefix('user')
         Route::post('/user', [UserController::class, 'updateProfile'])->name('updateProfile');
         Route::get('/document/create', [DocumentController::class, 'create'])->name('document.create');
         Route::post('/document/store', [DocumentController::class, 'store'])->name('document.store');
+        Route::get('/document/edit/{id}', [DocumentController::class, 'edit'])->name('document.edit');
+        Route::post('/document/update', [DocumentController::class, 'update'])->name('document.update');
+        Route::get('/document/view/{id}', [DocumentController::class, 'view'])->name('document.view');
     });
 
 Route::controller(AdminAuthController::class)->prefix('admin')
     ->name('admin.')->group(function () {
-        Route::get('register', 'showRegister')->name('showRegister');
-        Route::post('/register', 'register')->name('register');
         Route::get('/login', 'showLogin')->name('showLogin');
         Route::post('/login', 'login')->name('login');
     });
 
 Route::middleware(['CheckAdmin'])->prefix('admin')
     ->name('admin.')->group(function () {
+        Route::get('/profile', [\App\Http\Controllers\Admin\AuthController::class, 'profile'])->name('profile');
+        Route::post('/profile', [\App\Http\Controllers\Admin\AuthController::class, 'updateProfile'])->name('updateProfile');
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/user', [AdminUserController::class, 'index'])->name('user');
         Route::get('/user/view/{id}', [AdminUserController::class, 'view'])->name('user.view');

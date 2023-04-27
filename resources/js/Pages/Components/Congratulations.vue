@@ -2,9 +2,9 @@
 <template>
 
     <div class="min-h-full flex flex-col justify-center py-3 sm:px-6 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <img class="mx-auto h-14 w-14" :src="route('home')+'/icons/congrates.png'" alt="Workflow" />
-        </div>
+<!--        <div class="sm:mx-auto sm:w-full sm:max-w-md">-->
+<!--            <img class="mx-auto h-14 w-14" :src="route('home')+'/icons/congrates.png'" alt="Workflow" />-->
+<!--        </div>-->
     </div>
     <div class="min-h-full flex flex-col justify-center py-3 sm:px-6 lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-lg m-3">
@@ -13,7 +13,7 @@
                 You were able to successfully verify your account.  </p>
 
             <div class="text-center">
-                <button type="submit" @click="jumpToDashboard" class=" justify-center py-3 px-12 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Jump to Login</button>
+<!--                <button type="submit" @click="jumpToDashboard" class=" justify-center py-3 px-12 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Jump to Login</button>-->
             </div>
         </div>
     </div>
