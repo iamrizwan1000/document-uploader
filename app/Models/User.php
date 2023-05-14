@@ -8,10 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Laravel\Cashier\Billable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -23,13 +20,13 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
         'email',
         'password',
         'email_verified_token',
         'email_verified_at',
     ];
-
 
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = Hash::make($value);
@@ -53,13 +50,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function parent() {
-        return $this->belongsTo(static::class, 'parent_id');
-    }
-
-    public function documents() {
-        return $this->hasMany(Document::class);
-    }
-
 }

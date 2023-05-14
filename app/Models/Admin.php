@@ -3,12 +3,10 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 
 class Admin extends Authenticatable
 {
@@ -21,6 +19,10 @@ class Admin extends Authenticatable
         'password',
     ];
 
+    public function invites()
+    {
+        return $this->morphMany(Invite::class, 'inviteable');
+    }
 
     public function setPasswordAttribute($value) {
         $this->attributes['password'] = Hash::make($value);

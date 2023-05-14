@@ -15,10 +15,7 @@ return new class extends Migration
     {
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('description');
             $table->string('image');
-            $table->string('extension');
             $table->bigInteger('user_id');
             $table->timestamps();
         });

@@ -1,14 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\AuthController as AdminAuthController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Front\AuthController;
-use App\Http\Controllers\Front\DashboardController as UserDashboardController;
 use Illuminate\Support\Facades\Route;
+
+
+use \App\Http\Controllers\Front\AuthController;
+use \App\Http\Controllers\Front\DocumentController;
 use \App\Http\Controllers\Front\UserController;
 use \App\Http\Controllers\Admin\UserController as AdminUserController;
-use \App\Http\Controllers\Front\DocumentController;
-
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,19 +21,17 @@ use \App\Http\Controllers\Front\DocumentController;
 |
 */
 
-
 Route::get('/', function () {
-    return \Inertia\Inertia::render('Front/Auth/Login');
-})->name('home');
+    return \Inertia\Inertia::render('Index');
+});
 
-// new
+
 Route::controller(AuthController::class)
     ->group(function () {
         Route::get('register', 'showRegister')->name('showRegister');
         Route::post('/register', 'register')->name('register');
         Route::get('/login', 'showLogin')->name('showLogin');
         Route::post('/login', 'login')->name('login');
-        Route::post('/jump-to-dashboard/{token}', 'jumpToDashboard')->name('jumpToDashboard');
         Route::get('/verify/email/{token}', 'verifyEmail')->name('verifyEmail');
         Route::get('/re-send/verify/email', 'resendVerifyEmail')->name('resendVerifyEmail');
         Route::get('/forgot/password', 'forgotPassword')->name('forgotPassword');
@@ -43,17 +41,18 @@ Route::controller(AuthController::class)
     });
 
 
-Route::get('/dashboard', [UserDashboardController::class,'index'])->name('dashboard')->middleware(['auth']);
 Route::middleware(['auth'])->prefix('user')
-    ->name('user.')
     ->group(function () {
-        Route::get('/profile', [UserController::class, 'profile'])->name('profile');
-        Route::post('/user', [UserController::class, 'updateProfile'])->name('updateProfile');
+        Route::get('/document', [DocumentController::class, 'index'])->name('document.index');
         Route::get('/document/create', [DocumentController::class, 'create'])->name('document.create');
         Route::post('/document/store', [DocumentController::class, 'store'])->name('document.store');
         Route::get('/document/edit/{id}', [DocumentController::class, 'edit'])->name('document.edit');
         Route::post('/document/update', [DocumentController::class, 'update'])->name('document.update');
         Route::get('/document/view/{id}', [DocumentController::class, 'view'])->name('document.view');
+        Route::post('/document/delete/{id}', [DocumentController::class, 'delete'])->name('document.delete');
+
+        Route::get('/profile', [UserController::class, 'profile'])->name('profile');
+        Route::post('/user', [UserController::class, 'updateProfile'])->name('updateProfile');
     });
 
 Route::controller(AdminAuthController::class)->prefix('admin')
@@ -73,10 +72,6 @@ Route::middleware(['CheckAdmin'])->prefix('admin')
         Route::post('/user', [AdminUserController::class, 'updateProfile'])->name('user.updateProfile');
     });
 
-
-Route::post('/logout', [\App\Http\Controllers\Front\AuthController::class, 'logout'])
+Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
-
-Route::post('/admin/logout', [\App\Http\Controllers\Admin\AuthController::class, 'logout'])
-    ->name('admin.logout');
 

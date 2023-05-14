@@ -8,15 +8,16 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Resources\UserResource;
-use App\Mail\ResetEmail;
-use App\Mail\VerifyEmail;
+use App\Jobs\RegisterUser;
+use App\Jobs\ResetUser;
+use App\Jobs\VerifyUser;
 use App\Models\User;
+use App\Repositories\AuthRepository;
 use App\Repositories\Interfaces\AuthInterface;
 use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 
@@ -26,12 +27,11 @@ class AuthController extends Controller
     use ApiResponse;
 
     /**
-     * Method to show Registration page
      * @return \Inertia\Response
      */
     public function showRegister()
     {
-        return Inertia::render('Front/Auth/Register');
+        return Inertia::render('New/Register');
     }
 
 
@@ -40,9 +40,8 @@ class AuthController extends Controller
      * @param AuthInterface $authRepository
      * @return \Illuminate\Http\RedirectResponse|\Inertia\Response
      */
-    public function register(RegisterRequest $registerRequest, AuthInterface $authRepository)
+    public function register(RegisterRequest $registerRequest, AuthRepository $authRepository)
     {
-
         // Register through AuthRepository function
         $user = $authRepository->register($registerRequest->all());
 
@@ -50,13 +49,11 @@ class AuthController extends Controller
         if ($user->getData()->error != 'true') {
             $user = $user->getData()->data->data;
 
-            // Below function will send confirmation email to user, Queue needs to be added later.
-            Mail::to($user->email)->send(new VerifyEmail($user));
+            // Below function will send confirmation email to user.
+            dispatch(new RegisterUser($user));
 
             return Inertia::render('Components/Success',[
                 'user' => $user,
-                'success' => 'Congratulations',
-                'message' => 'Verification email has been sent to your email at '. $user->email .' please verify email and login to continue',
             ]);
         }else{
             return redirect()->back()->with(['title' => 'Error', 'message' => $user->getData()->message]);
@@ -72,38 +69,22 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        return Inertia::render('Front/Auth/Login');
+        return Inertia::render('New/Login');
     }
-
-
-    /**
-     * @param AuthInterface $authRepository
-     * @param $token
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function jumpToDashboard(AuthInterface $authRepository,$token){
-
-//        $verify = User::whereEmailVerifiedToken($token)->first();
-//
-//        Auth::loginUsingId($verify->id);
-
-        return redirect()->to('/login');
-    }
-
 
     /**
      * @param LoginRequest $loginRequest
      * @param AuthInterface $authRepository
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function login(LoginRequest $loginRequest, AuthInterface $authRepository)
+    public function login(LoginRequest $loginRequest, AuthRepository $authRepository)
     {
         // Login through AuthRepository login method
         $data = $authRepository->login($loginRequest->all('email', 'password'), \auth());
 
         // Get response from AuthRepository and redirect according to response
         if ($data->getData()->error != 'true') {
-            return redirect()->to('/dashboard')->with(['title' => 'Success', 'message' => $data->getData()->message]);
+            return redirect()->to(route('document.index'))->with(['title' => 'Success', 'message' => $data->getData()->message]);
         }else{
             return redirect()->back()->with(['title' => 'Error', 'message' => $data->getData()->message]);
 
@@ -135,21 +116,19 @@ class AuthController extends Controller
     public function verifyEmail($token){
 
         try {
-            $verify = User::whereEmailVerifiedToken($token)->first();
+            $user = User::whereEmailVerifiedToken($token)->first();
 
-            if (!$verify) {
+            if (!$user) {
                 return Inertia::render('Components/Page404');
             }
 
-            $verify->email_verified_at = Carbon::now()->timestamp;
+            $user->email_verified_at = Carbon::now()->timestamp;
 //            $verify->email_verified_token = null;
 
-            $verify->save();
+
+            $user->save();
             return Inertia::render('Components/Congratulations',[
-                'user' => new UserResource($verify),
-                'token' => $token,
-                'success' => 'Congratulations',
-                'message' => 'Your email'. $verify->email .' has been verified',
+                'user' => $user,
             ]);
         }catch (\Exception $e){
             return $this->error($e->getMessage());
@@ -163,7 +142,7 @@ class AuthController extends Controller
      */
     public function forgotPassword()
     {
-        return Inertia::render('Front/Auth/ForgotPassword');
+        return Inertia::render('New/ResetPassword');
     }
 
 
@@ -180,40 +159,13 @@ class AuthController extends Controller
             $user->email_verified_token = generateRandomString($authResendVerifyEmailRequest['email']);
             $user->save();
 
-            // Below function will send confirmation email to user, Queue needs to be added later.
-            Mail::to($user->email)->send(new ResetEmail($user));
+            // Below function will send confirmation email to user.
+            dispatch(new ResetUser($user));
 
-            return Inertia::render('Components/Verify',[
-                'user' => new UserResource($user),
-                'success' => 'Congratulations',
-                'message' => 'Reset password link has been sent to your email at '. $user->email .' please click reset your password',
+            return Inertia::render('Components/Success',[
+                'user' => $user,
             ]);
 
-        }catch (\Exception $e){
-            return $this->error($e->getMessage(), 500);
-        }
-    }
-
-
-
-
-    /**
-     * On register if email is not received then this function will send email again upon clicking resend email button
-     * @param AuthResendVerifyEmailRequest $authResendVerifyEmailRequest
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function resendVerifyEmail(AuthResendVerifyEmailRequest $authResendVerifyEmailRequest){
-
-        try {
-            $user = User::whereEmail($authResendVerifyEmailRequest['email'])->first();
-            $user->email_verified_token = generateRandomString($authResendVerifyEmailRequest['email']);
-            $user->save();
-
-            // Below function will send confirmation email to user, Queue needs to be added later.
-            Mail::to($authResendVerifyEmailRequest['email'])->send(new VerifyEmail($user));
-
-            return $this->success([
-            ],'Confirmation email has been sent again to your Email please approve to continue to login');
         }catch (\Exception $e){
             return $this->error($e->getMessage(), 500);
         }
@@ -235,7 +187,7 @@ class AuthController extends Controller
             return Inertia::render('Components/Page404');
         }
 
-        return Inertia::render('Front/Auth/UpdatePassword');
+        return Inertia::render('New/UpdatePassword');
     }
 
 
@@ -247,6 +199,7 @@ class AuthController extends Controller
     public function updatePassword(UpdatePasswordRequest $updatePasswordRequest){
 
         try {
+
             $token = \url()->previous();
             $token = substr($token, strpos($token, "reset=") + 6);
 
@@ -260,7 +213,7 @@ class AuthController extends Controller
                 'password' => Hash::make($updatePasswordRequest['password'])
             ]);
 
-            return Inertia::render('Components/Congratulations',[
+            return Inertia::render('Components/PasswordUpdated',[
                 'user' => new UserResource(User::find($user->id)),
                 'success' => 'Congratulations',
                 'message' => 'Password has been Updated Successfully',

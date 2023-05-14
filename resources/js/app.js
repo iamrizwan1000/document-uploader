@@ -1,5 +1,6 @@
 import './bootstrap';
 import '../css/app.css';
+import '@mdi/font/css/materialdesignicons.css'
 
 import { createApp, h } from 'vue';
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
@@ -9,6 +10,17 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m';
 import Toaster from "@meforma/vue-toaster";
 import 'viewerjs/dist/viewer.css'
 import VueViewer from 'v-viewer'
+
+// Vuetify
+import 'vuetify/styles'
+import { createVuetify } from 'vuetify'
+import * as components from 'vuetify/components'
+import * as directives from 'vuetify/directives'
+
+const vuetify = createVuetify({
+  components,
+  directives,
+})
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
@@ -21,6 +33,7 @@ createInertiaApp({
             .use(Toaster)
             .use(VueViewer)
             .use(ZiggyVue, Ziggy)
+            .use(vuetify)
             .mount(el);
     },
 });

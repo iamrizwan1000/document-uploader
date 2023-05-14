@@ -18,8 +18,16 @@
                                     <div>
                                         <!--                        <label for="name" class="block text-sm font-medium text-gray-700"> First Name </label>-->
                                         <div class="mt-1">
-                                            <input id="name" placeholder="First Name" v-model="form.name" name="name" type="text" autocomplete="off" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                                            <span v-if="errors.name" v-text="errors.name"></span>
+                                            <input id="name" placeholder="First Name" v-model="form.first_name" name="first_name" type="text" autocomplete="off" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                                            <span v-if="errors.first_name" v-text="errors.first_name"></span>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <!--                        <label for="name" class="block text-sm font-medium text-gray-700"> First Name </label>-->
+                                        <div class="mt-1">
+                                            <input id="name" placeholder="Last Name" v-model="form.last_name" name="last_name" type="text" autocomplete="off" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                                            <span v-if="errors.last_name" v-text="errors.last_name"></span>
                                         </div>
                                     </div>
 
@@ -40,9 +48,10 @@
                                     </div>
 
 
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <PrimaryButton>Save</PrimaryButton>
-                                        <SecondaryButton :type="'button'" @click="cancel">Cancel</SecondaryButton>
+                                    <div class="" style="margin-top: 20px;">
+                                        <div class="is-flex is-justify-content-center">
+                                            <button type="submit" class="button is-link is-rounded" style="background-color: #3399FD; width: 50%;">Next</button>
+                                        </div>
                                     </div>
 
 
@@ -69,7 +78,8 @@ const props = defineProps(['user','errors','alert','roles'])
 
 
 const form = reactive({
-    name: props.user == undefined ? null : props.user.data.name,
+    first_name: props.user == undefined ? null : props.user.data.first_name,
+    last_name: props.user == undefined ? null : props.user.data.last_name,
     id: props.user == undefined ? null : props.user.data.id,
     email: props.user == undefined ? null : props.user.data.email,
     isEditAble: props.user == undefined ? false : true

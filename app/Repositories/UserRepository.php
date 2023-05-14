@@ -35,7 +35,23 @@ class UserRepository extends BaseRepository implements UserInterface
      */
     public function index(Request $request)
     {
-        return UserResource::collection(User::all());
+        $searchValue = $request->input('');
+        $first_name = $request->input('first_name');
+        $last_name = $request->input('last_name');
+        $email = $request->input('email');
+        $role = $request->input('role');
+
+        $filter = new UserFilter($searchValue);
+
+        $filter
+            ->setQuery($filter->getQuery())
+            ->setFirstName($first_name)
+            ->setUser()
+            ->setLastName($last_name)
+            ->setEmail($email)
+            ->setRole($role);
+
+        return UserResource::collection($filter->getQuery()->paginate(15)->withQueryString());
     }
 
 
@@ -48,12 +64,19 @@ class UserRepository extends BaseRepository implements UserInterface
 
         try {
             $user = new User();
-            $user->name = $data['name'];
+            $user->front_end_id =  front_end_id(10);
+            $user->first_name = $data['first_name'];
+            $user->last_name = $data['last_name'];
             $user->email = $data['email'];
+            $user->linkedin = $data['linkedin'];
+            $user->company = $data['company'];
             $user->password = $data['password'];
             $user->email_verified_at = Carbon::now();
 
             $user->save();
+
+
+            $user->assignRole($data['role_id']);
 
             return $user;
         }catch (\Exception $e){
@@ -70,8 +93,10 @@ class UserRepository extends BaseRepository implements UserInterface
     {
         try {
             $user = User::find($id);
-            $user->name = $data['name'];
+            $user->first_name = $data['first_name'];
+            $user->last_name = $data['last_name'];
             $user->email = $data['email'];
+
 
             if (isset($data['password'])) {
                 $user->password = $data['password'];
@@ -79,6 +104,7 @@ class UserRepository extends BaseRepository implements UserInterface
 
             $user->save();
 
+//            $user->assignRole($data['role_id']['id']);
 
             return $user;
         }catch (\Exception $e){

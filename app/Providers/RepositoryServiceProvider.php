@@ -2,11 +2,13 @@
 
 namespace App\Providers;
 
+
 use App\Repositories\AuthRepository;
 use App\Repositories\Interfaces\AuthInterface;
 use App\Repositories\Interfaces\UserInterface;
 use App\Repositories\UserRepository;
 use Illuminate\Support\ServiceProvider;
+
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -22,9 +24,19 @@ class RepositoryServiceProvider extends ServiceProvider
             UserInterface::class => UserRepository::class,
         ];
 
-        foreach ($repositories as $interface => $repository){
-            $this->app->bind($interface,$repository);
-        }
+        $this->app->bind(
+            AuthInterface::class,
+            AuthRepository::class
+        );
+
+        $this->app->bind(
+            UserInterface::class,
+            UserRepository::class
+        );
+
+//        foreach ($repositories as $interface => $repository){
+//            $this->app->bind($interface,$repository);
+//        }
     }
 
     /**

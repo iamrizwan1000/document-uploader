@@ -121,7 +121,6 @@ import { can } from "../../Can.js";
 import Invite from "../../Components/Invite.vue"
 import {SearchIcon} from '@heroicons/vue/solid'
 import {Link} from '@inertiajs/inertia-vue3'
-import {Table} from "@protonemedia/inertiajs-tables-laravel-query-builder";
 import {reactive, ref, watch} from "vue";
 import {Inertia} from "@inertiajs/inertia";
 import DeleteConfirmation from "../../Components/DeleteConfirmation.vue";

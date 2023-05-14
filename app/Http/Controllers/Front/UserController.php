@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Repositories\Interfaces\AuthInterface;
@@ -46,7 +47,7 @@ class UserController extends Controller
         $user = new UserResource(Auth::user());
 
 
-        return Inertia::render('Front/User/Form',[
+        return Inertia::render('New/User/Form',[
             'user' => $user,
         ]);
 
@@ -60,16 +61,12 @@ class UserController extends Controller
      * @param $id
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateProfile(\Illuminate\Http\Request $request, UserInterface $userRepository){
+    public function updateProfile(UpdatePasswordRequest $updatePasswordRequest, UserInterface $userRepository){
 
-        $request->validate([
-            'name' => ['required'],
-            'email' => ['required', 'email'],
-            'password' => ['nullable'],
-        ]);
+
 
         try {
-            $userRepository->updateProfile($request->all(),Auth::user()->id);
+            $userRepository->updateProfile($updatePasswordRequest->all(),Auth::user()->id);
 
 
             return redirect()->back()->with(['title' => 'Success', 'message' => 'Updated Successfully']);

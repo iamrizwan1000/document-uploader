@@ -1,42 +1,98 @@
-
 <template>
+    <div>
+        <section style="height: 100%;">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
 
-    <div class="min-h-full flex flex-col justify-center py-3 sm:px-6 lg:px-8">
-<!--        <div class="sm:mx-auto sm:w-full sm:max-w-md">-->
-<!--            <img class="mx-auto h-14 w-14" :src="route('home')+'/icons/congrates.png'" alt="Workflow" />-->
-<!--        </div>-->
-    </div>
-    <div class="min-h-full flex flex-col justify-center py-3 sm:px-6 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-lg m-3">
-            <h2 class="text-center text-3xl font-sans font-semibold text-[#111827] pb-2">Congratulation!</h2>
-            <p class="text-center font-sans text-gray-500 pb-2 pt-2">
-                You were able to successfully verify your account.  </p>
+            </nav>
+            <div class="columns  has-text-dark">
+                <div class="column has-background is-relative is-two-fifths bg-img" style="background-image: url('https://images.unsplash.com/photo-1683497727598-2b9334818703?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4OHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60');background-repeat: no-repeat;background-size: cover;">
+                    <div class="specification p-4" style="background-color: #171C2E;color: #FFFFFF; bottom: 100px;left: 50px;right: 50px; position: absolute;">
+                        <p class="is-size-4 has-text-weight-bold">Specification Engine</p>
+                        <p class="is-size-7 mt-2">Take a guided walk through of your space and start defining your specification. This will give you an idea of total cost</p>
+                    </div>
+                </div>
+                <div class="column card-div" style="height: 100vh;">
+                    <div class="card">
+                        <header class="card-header">
+                            <p class="card-header-title">
+                                <i class="fas fa-arrow-left pr-4"></i>
+                                Congratulations
+                            </p>
+                        </header>
+                        <div class="card-content">
+                            <div class="content px-5">
+                                <div class="field is-flex is-justify-content-center">
+                                    <span class="has-text-centered is-size-3 lock-wraper"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <div>
+                                    <p class="has-text-centered custom-line-height mt-4">Your email has been Verified</p>
+                                    <p class="has-text-centered custom-line-height" style="color: #FF694E;">{{user.email}}</p>
+                                </div>
 
-            <div class="text-center">
-<!--                <button type="submit" @click="jumpToDashboard" class=" justify-center py-3 px-12 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-500 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Jump to Login</button>-->
+
+                                <div class="" style="margin-top: 40px;">
+                                    <div class="is-flex is-justify-content-center">
+                                        <button  @click="login" class="button is-link is-rounded" style="background-color: #3399FD; width: 250px;">Login</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
     </div>
 </template>
 
 <script>
-import { Link } from "@inertiajs/inertia-vue3";
+
+import {Inertia} from "@inertiajs/inertia";
+
 export default {
-    name: "Success",
-    components:{
-        Link
+    props : {
+        user :Object
     },
     methods:{
-        jumpToDashboard(){
-            console.log(this)
-            this.$inertia.post(route('jumpToDashboard', { token : this.token }))
+        login(){
+            Inertia.get('/login', this.form)
         }
-    },
-    props: {
-        user : Object,
-        token : String,
-        success : String,
-        message : String,
     }
 }
 </script>
+
+<style>
+html{
+    background-color: #F2F2F5;
+}
+.card-div{
+    padding-left: 7.75rem;
+    padding-right: 7.75rem;margin-top: 2rem;
+}
+.lock-wraper{
+    padding-left: 22px;
+    padding-right: 22px;
+    padding-top: 10px;
+    padding-bottom: 15px;
+
+    border-radius: 100%;
+    color: #FF694E;
+    background-color: rgb(255,105,78,0.2);
+}
+.custom-line-height{
+    line-height: 0.5;
+}
+
+@media (max-width: 1100px) {
+    .card-div{
+        padding-left: 2.75rem;
+        padding-right: 2.75rem;margin-top: 2rem;
+    }
+}
+
+@media (max-width: 874px) {
+    .bg-img{
+        display: none;
+
+    }
+}
+</style>

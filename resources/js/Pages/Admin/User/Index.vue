@@ -39,7 +39,7 @@
 
                                     <tr v-for="user in users.data" :key="user.id" :class="[index % 2 === 0 ? 'bg-white' : 'bg-gray-50']">
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-500">
-                                            {{user.name}}
+                                            {{user.first_name}} {{user.last_name}}
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {{user.email}}

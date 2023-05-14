@@ -20,7 +20,8 @@ class UserResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'first_name' => $this->first_name,
+            'last_name' => $this->last_name,
             'email' => $this->email,
             'email_verified_at' => $this->email_verified_at != null || '' ? 'Verified' : 'Not Verified',
             'created_at' => Carbon::parse($this->created_at)->format('jS F Y'),

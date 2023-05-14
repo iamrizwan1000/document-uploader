@@ -33,7 +33,7 @@ class VerifyEmail extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Verify Email',
+            subject: 'Verify your account',
         );
     }
 
