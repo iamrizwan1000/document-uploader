@@ -9,6 +9,7 @@ use \App\Http\Controllers\Front\UserController;
 use \App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +23,7 @@ use App\Http\Controllers\Admin\DashboardController;
 */
 
 Route::get('/', function () {
-    return \Inertia\Inertia::render('Index');
+    return Inertia::render('New/Login');
 });
 
 
