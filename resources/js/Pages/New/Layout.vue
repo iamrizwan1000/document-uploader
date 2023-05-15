@@ -106,10 +106,10 @@
         mounted() {
             const path = window.location.pathname;
 
-// Split the path into an array of segments
+
             const segments = path.split('/');
 
-// Get the last two segments
+
             const lastSegment = segments[segments.length - 1];
             const secondLastSegment = segments[segments.length - 2];
 

@@ -139,7 +139,7 @@ class AuthController extends Controller
 
             Auth::guard('admin')->logout();
 
-            return Redirect::route('home');
+            return Redirect::route('admin.showLogin');
         }
     }
 

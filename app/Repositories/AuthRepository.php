@@ -28,6 +28,7 @@ class AuthRepository extends BaseRepository implements AuthInterface
 
             $input = $data;
             $input['email_verified_token'] = generateRandomString($data['email']);
+            $input['agreement'] = 1;
             $user = User::create(
                 $input
             );

@@ -68,10 +68,14 @@ Route::middleware(['CheckAdmin'])->prefix('admin')
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/user', [AdminUserController::class, 'index'])->name('user');
         Route::get('/user/view/{id}', [AdminUserController::class, 'view'])->name('user.view');
+        Route::post('/user/delete-document/{id}', [AdminUserController::class, 'deleteDocument'])->name('user.deleteDocument');
         Route::get('/user/profile/{id}', [AdminUserController::class, 'profile'])->name('user.profile');
         Route::post('/user', [AdminUserController::class, 'updateProfile'])->name('user.updateProfile');
     });
 
 Route::post('/logout', [AuthController::class, 'logout'])
     ->name('logout');
+
+Route::post('/admin/logout', [AdminAuthController::class, 'logout'])
+    ->name('admin.logout');
 

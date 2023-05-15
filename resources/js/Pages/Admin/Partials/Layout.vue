@@ -50,6 +50,11 @@
                             <component :is="item.icon" class="mr-4 flex-shrink-0 h-6 w-6 text-cyan-200" aria-hidden="true" />
                             {{ item.name }}
                         </Link>
+
+                        <Link method="post" :href="route('admin.logout')" :class="[current ? 'bg-cyan-800 text-white' : 'text-cyan-100 hover:text-white hover:bg-cyan-600', 'group flex items-center px-2 py-2 text-sm leading-6 font-medium rounded-md']" :aria-current="current ? 'page' : undefined">
+                            <LogoutIcon class="mr-4 flex-shrink-0 h-6 w-6 text-cyan-200" aria-hidden="true"/>
+                            Logout
+                        </Link>
                     </div>
 <!--                    <div class="mt-6 pt-6">-->
 <!--                        <div class="px-2 space-y-1">-->
@@ -142,6 +147,7 @@ import {
     ShieldCheckIcon,
     UserGroupIcon,
     XIcon,
+    LogoutIcon,
 } from '@heroicons/vue/outline'
 import {
     CashIcon,
@@ -181,10 +187,12 @@ const statusStyles = {
 export default {
     data() {
         return {
+            current : false,
             navigation : [
                 { name: 'Dashboard', href: route('admin.dashboard'), icon: HomeIcon, current: true },
                 { name: 'Users', href: route('admin.user'), icon: UserGroupIcon, current: false },
                 { name: 'Profile', href: route('admin.profile'), icon: UserGroupIcon, current: false },
+                // { name: 'Logout', href: route('admin.logout'), icon: LogoutIcon, current: false },
             ],
         }
     },
@@ -198,6 +206,7 @@ export default {
     },
     components: {
         Dialog,
+        LogoutIcon,
         Link,
         DialogOverlay,
         Menu,

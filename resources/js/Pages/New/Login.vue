@@ -5,14 +5,14 @@
            <nav class="navbar" role="navigation" aria-label="main navigation">
 
            </nav>
-           <div class="columns has-background-light has-text-dark" style="height: 100vh;">
+           <div class="columns has-background-light has-text-dark v-height">
                <div class="column has-background is-relative is-two-fifths bg-img" style="background-image: url('https://images.unsplash.com/photo-1683497727598-2b9334818703?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4OHx8fGVufDB8fHx8&auto=format&fit=crop&w=600&q=60');background-repeat: no-repeat;background-size: cover;">left
-                   <div class="specification p-4" style="background-color: #171C2E;color: #FFFFFF; bottom: 100px;left: 50px;right: 50px; position: absolute;">
+                   <div class="specification p-4 cardAdjustment">
                        <p class="is-size-4 has-text-weight-bold">Specification Engine</p>
                        <p class="is-size-7 mt-2">Take a guided walk through of your space and start defining your specification. This will give you an idea of total cost</p>
                    </div>
                </div>
-               <div class="column" style="padding-left: 7.75rem;padding-right: 7.75rem;margin-top: 2rem;">
+               <div class="column columnAdjustment">
                    <div class="card">
                        <header class="">
                            <p class="card-header-title">
@@ -70,7 +70,7 @@
 
                                <div class="" style="margin-top: 20px;">
                                    <div class="is-flex is-justify-content-center">
-                                       <button type="submit" class="button is-link is-rounded" style="background-color: #3399FD; width: 50%;">Next</button>
+                                       <button type="submit" class="button is-link is-rounded btn" style="background-color: #3399FD; width: 50%;">Next</button>
                                    </div>
                                </div>
                                </form>
@@ -141,4 +141,13 @@ export default {
 
 <style scoped>
 
+.v-height{
+    height: 100vh;
+}
+.cardAdjustment{
+    background-color: #171C2E;color: #FFFFFF; bottom: 100px;left: 50px;right: 50px; position: absolute;
+}
+.columnAdjustment{
+    padding-left: 7.75rem;padding-right: 7.75rem;margin-top: 2rem;
+}
 </style>

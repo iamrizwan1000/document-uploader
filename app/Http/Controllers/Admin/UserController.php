@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Resources\DocumentResource;
 use App\Http\Resources\ImageResource;
 use App\Http\Resources\RoleResource;
 use App\Http\Resources\UserResource;
@@ -15,6 +16,7 @@ use App\Repositories\UserRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Spatie\Permission\Models\Role;
@@ -34,13 +36,38 @@ class UserController extends Controller
     public function view($id){
 
         $user = User::where('id', $id)->first();
-        $docs = Document::where('user_id', $id)->orderBy('extension', 'xlsx')->get();
+        $docs = Document::where('user_id', $id)->get();
         return Inertia::render('Admin/User/View',[
-            'doc' => ImageResource::collection($docs),
+            'docs' => DocumentResource::collection($docs),
             'user' => $user
         ]);
     }
 
+    public function deleteDocument($id){
+
+
+        try {
+
+
+            $document = Document::find($id);
+
+            if ($document) {
+                if(File::exists(public_path('images/'.$document->image))){
+                    File::delete(public_path('images/'.$document->image));
+                }
+
+                $document->delete();
+            }
+
+
+            return redirect()->back()->with(['title' => 'Success', 'message' => 'You have successfully updated record.']);
+
+        }catch (\Exception $e){
+            return redirect()->back()->with(['title' => 'Error', 'message' => $e->getMessage()]);
+        }
+
+
+    }
 
     /**
      * @param UserInterface $userRepository

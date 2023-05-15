@@ -54,7 +54,7 @@
                 <!-- Tab content 4 -->
                 <div class="tab-content">
                     <div class="p-4">
-                        <v-icon class="text-teal-600" :class="selected" icon="mdi-folder-multiple-outline" size="x-large">
+                        <v-icon class="text-teal-600" icon="mdi-folder-multiple-outline" size="x-large">
                         </v-icon>
                     </div>
                 </div>
